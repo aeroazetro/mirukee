@@ -228,10 +228,10 @@
   <script>
   const draggable = document.getElementById("draggable");
   const lid = document.querySelector(".lid");
-
+  const card = document.querySelector(".card");
   let isDragging = false;
+  let isOpen = false; // Track if the envelope is open
   let offsetX = 0, offsetY = 0;
-  let isOpen = false; // Track if the envelope is already opened
 
   // Helper function to get the correct coordinates for mouse or touch events
   function getEventCoordinates(e) {
@@ -244,30 +244,19 @@
   // Start dragging (mouse or touch)
   function startDrag(e) {
     isDragging = true;
-
     const { x, y } = getEventCoordinates(e);
-
-    // Calculate the offset of the cursor relative to the element's top-left corner
     offsetX = x - draggable.offsetLeft;
     offsetY = y - draggable.offsetTop;
-
     draggable.style.cursor = "grabbing";
-
-    // Prevent default behavior to avoid touch scrolling
     if (e.touches) e.preventDefault();
   }
 
   // Dragging (mouse or touch)
   function drag(e) {
     if (!isDragging) return;
-
     const { x, y } = getEventCoordinates(e);
-
-    // Update the position of the draggable element
     draggable.style.left = `${x - offsetX}px`;
     draggable.style.top = `${y - offsetY}px`;
-
-    // Prevent default behavior to avoid touch scrolling
     if (e.touches) e.preventDefault();
   }
 
@@ -277,14 +266,30 @@
     draggable.style.cursor = "grab";
   }
 
-  // Open the envelope (for touchscreens)
+  // Open the envelope (lid and card animation)
   function openEnvelope() {
     if (!isDragging && !isOpen) {
-      // Trigger the CSS animation for the lid
       lid.style.animation = "open 0.5s forwards";
+      card.style.animation = "slide 0.5s 0.5s forwards";
       isOpen = true;
     }
   }
+
+  // Close the envelope (reverse lid and card animation)
+  function closeEnvelope() {
+    if (!isDragging && isOpen) {
+      lid.style.animation = "open-rev 0.5s forwards";
+      card.style.animation = "slide-rev 0.5s 0.5s forwards";
+      isOpen = false;
+    }
+  }
+
+  // Detect tap outside the envelope to close it
+  window.addEventListener("click", (e) => {
+    if (!draggable.contains(e.target)) {
+      closeEnvelope();
+    }
+  });
 
   // Event listeners for mouse events
   draggable.addEventListener("mousedown", startDrag);
@@ -293,12 +298,13 @@
 
   // Event listeners for touch events
   draggable.addEventListener("touchstart", (e) => {
-    openEnvelope(); // Open the envelope on touchstart
+    openEnvelope(); // Open the envelope on tap
     startDrag(e); // Start dragging
   });
   window.addEventListener("touchmove", drag);
   window.addEventListener("touchend", endDrag);
 </script>
+
 
 
 </body>
