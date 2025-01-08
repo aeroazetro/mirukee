@@ -227,9 +227,11 @@
   </div>
   <script>
   const draggable = document.getElementById("draggable");
+  const lid = document.querySelector(".lid");
 
   let isDragging = false;
   let offsetX = 0, offsetY = 0;
+  let isOpen = false; // Track if the envelope is already opened
 
   // Helper function to get the correct coordinates for mouse or touch events
   function getEventCoordinates(e) {
@@ -275,16 +277,29 @@
     draggable.style.cursor = "grab";
   }
 
+  // Open the envelope (for touchscreens)
+  function openEnvelope() {
+    if (!isDragging && !isOpen) {
+      // Trigger the CSS animation for the lid
+      lid.style.animation = "open 0.5s forwards";
+      isOpen = true;
+    }
+  }
+
   // Event listeners for mouse events
   draggable.addEventListener("mousedown", startDrag);
   window.addEventListener("mousemove", drag);
   window.addEventListener("mouseup", endDrag);
 
   // Event listeners for touch events
-  draggable.addEventListener("touchstart", startDrag);
+  draggable.addEventListener("touchstart", (e) => {
+    openEnvelope(); // Open the envelope on touchstart
+    startDrag(e); // Start dragging
+  });
   window.addEventListener("touchmove", drag);
   window.addEventListener("touchend", endDrag);
 </script>
+
 
 </body>
 </html>
