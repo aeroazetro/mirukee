@@ -1,243 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      height: 100vh;
-      width: 100vw;
-      background: #ffe3ec;
-      font-family: "Gloria Hallelujah", serif;
-      font-size: 1vmin;
-      font-weight: 200;
-      font-style: normal;
-      color: #B77991;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .background-text {
-      position: absolute;
-      top: 50%; /* Center the text vertically behind the envelope */
-      left: 50%; /* Center the text horizontally behind the envelope */
-      transform: translate(-50%, -50%);
-      text-align: center;
-      font-size: 1.3vmin;
-      line-height: 1.5;
-      color: #9966cc;
-      z-index: 1; /* Ensure it's behind the envelope */
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); /* Match the envelope boundary */
-      width: 47.7vmin; /* Same as the envelope width */
-      height: 30vmin; /* Same as the envelope height */
-    }
-
-
-    .container {
-      position: absolute; /* Needed for draggable positioning */
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      cursor: grab;
-      z-index: 2; /* Ensure it's above the background text */
-    }
-
-    .envelope {
-      position: relative;
-      background: #9966cc;
-      height: 30vmin;
-      width: 47.7vmin;
-    }
-
-    .card {
-      position: absolute;
-      background: white;
-      height: 25vmin;
-      width: 43vmin;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      left: 2.5vmin;
-      top: 0vmin;
-      animation: slide-rev 0.2s ease-out;
-    }
-
-    .message {
-      position: absolute;
-      top: 5vmin;
-    }
-
-    .aze {
-      position: absolute;
-      height: 20vmin;
-      width: 20vmin;
-      border-radius: 40%;
-      top: 10vmin;
-      display: flex;
-    }
-
-    .heart {
-      position: relative;
-      width: 5vmin;
-      height: 4vmin;
-      top: 2vmin;
-      left: 0.6vmin;
-    }
-
-    .heart:before,
-    .heart:after {
-      position: absolute;
-      content: "";
-      left: 2.5vmin;
-      top: 0;
-      width: 2.5vmin;
-      height: 4vmin;
-      background: #fc978b;
-      border-radius: 2.5vmin 2.5vmin 0 0;
-      transform: rotate(-45deg);
-      transform-origin: 0 100%;
-    }
-
-    .heart:after {
-      left: 0;
-      transform: rotate(45deg);
-      transform-origin: 100% 100%;
-    }
-
-    .cover {
-      position: absolute;
-      height: 0;
-      width: 0;
-      border-bottom: 15vmin solid #fec0ce;
-      border-left: 24vmin solid transparent;
-      border-right: 24vmin solid transparent;
-      top: 15vmin;
-      z-index: 3;
-    }
-
-    .cover::after {
-      /* left triangle */
-      position: absolute;
-      content: '';
-      border-left: 24.5vmin solid #fec0ce;
-      border-bottom: 15vmin solid transparent;
-      border-top: 15vmin solid transparent;
-      top: -15vmin;
-      left: -24vmin;
-    }
-
-    .cover::before {
-      position: absolute;
-      content: '';
-      border-right: 24.5vmin solid #fec0ce;
-      border-bottom: 15vmin solid transparent;
-      border-top: 15vmin solid transparent;
-      top: -15vmin;
-      left: -0.5vmin;
-    }
-
-    .lid {
-      position: absolute;
-      height: 0;
-      width: 0;
-      border-top: 15vmin solid #9966cc;
-      border-left: 24vmin solid transparent;
-      border-right: 24vmin solid transparent;
-      top: 0;
-      transform-origin: top;
-      animation: open-rev 2s;
-    }
-
-    .container:hover .lid {
-      animation: open 0.5s;
-      animation-fill-mode: forwards;
-    }
-
-    .container:hover .card {
-      animation: slide 0.2s;
-      animation-delay: 0.5s;
-      animation-fill-mode: forwards;
-    }
-
-    .shadow {
-      position: relative;
-      top: 3vmin;
-      border-radius: 50%; 
-      opacity: 0.7;
-      height: 2vmin;
-      width: 48vmin;
-      background: #e8c5d0;
-    }
-
-    @keyframes open {
-      100% {
-        transform: rotatex(180deg);
-      }
-    }
-    
-    @keyframes open-rev {
-      0% {
-        transform: rotatex(180deg);
-      }
-      100% {
-        transform: rotatex(0);
-      }
-    }
-    
-    @keyframes slide {
-      100% {
-        transform: translatey(-15vmin);
-        z-index: 2;
-      }
-    }
-    
-    @keyframes slide-rev {
-      0% {
-        transform: translatey(-15vmin);
-        z-index: 1;
-      }
-      100% {
-        transform: translatey(0);
-      }
-    }
-
-  </style>
-</head>
-<body>
-  <div class="background-text">
-    <h1 class="secret">if you see this, tell me which dates you're available in cebu this feb <br><br> また近いうちにお会いしましょ !</h1>
-  </div>
-  <div class="container" id="draggable">
-    <div class="envelope"></div>
-    <div class="card">
-      <h1 class="message">you move more than just this envelope</h1>
-      <div class="aze">
-        <img src="heart.png" alt="Description of the image">
-        <div class="heart"></div>
-      </div>
-    </div>
-    <div class="cover"></div>
-    <div class="lid"></div>
-    <div class="shadow"></div>
-  </div>
-  <script>
+<script>
   const draggable = document.getElementById("draggable");
-  const lid = document.querySelector(".lid");
-  const card = document.querySelector(".card");
+
   let isDragging = false;
-  let isOpen = false; // Track if the envelope is open
   let offsetX = 0, offsetY = 0;
 
   // Helper function to get the correct coordinates for mouse or touch events
@@ -251,19 +15,30 @@
   // Start dragging (mouse or touch)
   function startDrag(e) {
     isDragging = true;
+
     const { x, y } = getEventCoordinates(e);
+
+    // Calculate the offset of the cursor relative to the element's top-left corner
     offsetX = x - draggable.offsetLeft;
     offsetY = y - draggable.offsetTop;
+
     draggable.style.cursor = "grabbing";
+
+    // Prevent default behavior to avoid touch scrolling
     if (e.touches) e.preventDefault();
   }
 
   // Dragging (mouse or touch)
   function drag(e) {
     if (!isDragging) return;
+
     const { x, y } = getEventCoordinates(e);
+
+    // Update the position of the draggable element
     draggable.style.left = `${x - offsetX}px`;
     draggable.style.top = `${y - offsetY}px`;
+
+    // Prevent default behavior to avoid touch scrolling
     if (e.touches) e.preventDefault();
   }
 
@@ -273,46 +48,13 @@
     draggable.style.cursor = "grab";
   }
 
-  // Open the envelope (lid and card animation)
-  function openEnvelope() {
-    if (!isDragging && !isOpen) {
-      lid.style.animation = "open 0.5s forwards";
-      card.style.animation = "slide 0.5s 0.5s forwards";
-      isOpen = true;
-    }
-  }
-
-  // Close the envelope (reverse lid and card animation)
-  function closeEnvelope() {
-    if (!isDragging && isOpen) {
-      lid.style.animation = "open-rev 0.5s forwards";
-      card.style.animation = "slide-rev 0.5s 0.5s forwards";
-      isOpen = false;
-    }
-  }
-
-  // Detect tap outside the envelope to close it
-  window.addEventListener("click", (e) => {
-    if (!draggable.contains(e.target)) {
-      closeEnvelope();
-    }
-  });
-
   // Event listeners for mouse events
   draggable.addEventListener("mousedown", startDrag);
   window.addEventListener("mousemove", drag);
   window.addEventListener("mouseup", endDrag);
 
   // Event listeners for touch events
-  draggable.addEventListener("touchstart", (e) => {
-    openEnvelope(); // Open the envelope on tap
-    startDrag(e); // Start dragging
-  });
+  draggable.addEventListener("touchstart", startDrag);
   window.addEventListener("touchmove", drag);
   window.addEventListener("touchend", endDrag);
 </script>
-
-
-
-</body>
-</html>
